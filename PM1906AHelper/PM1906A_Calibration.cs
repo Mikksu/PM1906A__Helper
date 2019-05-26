@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PM1906AHelper
 {
-    public class Class1
+    public partial class PM1906A
     {
     }
 }
