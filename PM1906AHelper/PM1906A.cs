@@ -10,7 +10,6 @@ namespace PM1906AHelper
 {
     public partial class PM1906A : IDisposable
     {
-        #endregion
 
         #region Variables
 
@@ -32,7 +31,13 @@ namespace PM1906AHelper
 
         #endregion
 
-        #region Methods
+        #region Private Methods
+
+        private void _write(string command)
+        {
+            port.WriteLine(command);
+            Thread.Sleep(10);
+        }
 
         private string _query(string command)
         {
@@ -45,6 +50,10 @@ namespace PM1906AHelper
         {
             throw new Exception($"the format of the returned string `{ret_string}` is error.");
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Open()
         {
@@ -74,6 +83,9 @@ namespace PM1906AHelper
 
         public void Read(out double Value, out UnitEnum Unit)
         {
+            Value = double.NaN;
+            Unit = UnitEnum.dBm;
+
             var monkey = _query(CMD_READ);
 
             // split the value and the unit.
@@ -93,7 +105,7 @@ namespace PM1906AHelper
 
         public void GetRange(out RangeEnum Range)
         {
-            Range = RangeEnum.Min;
+            Range = RangeEnum.RANGE1;
             var monkey = _query($"{CMD_RANGE}?");
             try
             {
@@ -115,7 +127,7 @@ namespace PM1906AHelper
 
         public void GetUnit(out UnitEnum Unit)
         {
-            Unit = UnitEnum.Min;
+            Unit = UnitEnum.dBm;
             var monkey = _query($"{CMD_UNIT}?");
             try
             {
