@@ -1,0 +1,222 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:PM1906A_GUI"
+        xmlns:PM1906AHelperCore="clr-namespace:PM1906AHelper.Core;assembly=PM1906AHelper"
+        xmlns:PM1906AHelperCal="clr-namespace:PM1906AHelper.Calibration;assembly=PM1906AHelper"
+        xmlns:Converter="clr-namespace:PM1906A_GUI.Converter" 
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+        x:Class="PM1906A_GUI.MainWindow"
+        mc:Ignorable="d"
+        Title="PM1906A Control Panel" Height="450" Width="600" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+
+        <Converter:EnumerateConverter x:Key="EnumerateConverter"/>
+
+        <Converter:ConvertReverseBoolean x:Key="ConvertReverseBoolean"/>
+
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource Locator}}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Measurement display panel -->
+        <Grid Background="#FFFF7729">
+
+            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="80" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Agency FB" FontWeight="ExtraBold"/>
+            <Border Grid.Row="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Padding="2" Background="#22000000">
+                <TextBlock Text="{Binding Main.CurrentWavelength, StringFormat=\{0\} nm}" Foreground="White"/>
+            </Border>
+
+            <!-- Unit List -->
+            <Grid HorizontalAlignment="Right" Width="40" Grid.Column="1" VerticalAlignment="Top" Height="80">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="0,-2,0,-2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="TextAlignment" Value="Center"/>
+                        <Setter Property="Background" Value="Black"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontFamily" Value="Agency FB"/>
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+
+                    <Converter:UnitIndicatorOpacityConverter x:Key="opacityConverter"/>
+                </Grid.Resources>
+                <TextBlock Text="dBm" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=dBm, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="mW" Grid.Row="1" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mW, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="mA" Grid.Row="2" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mA, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="mV" Grid.Row="3" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mV, Converter={StaticResource opacityConverter}}"/>
+            </Grid>
+
+        </Grid>
+
+        <!-- Control Panel -->
+        <TabControl Grid.Row="2" TabStripPlacement="Bottom" Background="{x:Null}" BorderBrush="{x:Null}">
+            <TabItem Header="Manual" Background="{x:Null}" BorderBrush="{x:Null}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Connection Control -->
+                    <GroupBox Header="Connection" Margin="0,5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="COM" VerticalAlignment="Center" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                            <ComboBox VerticalAlignment="Center" ItemsSource="{Binding Main.PortNameList}" SelectedItem="{Binding Main.PortName, Delay=10}" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}}" Grid.Column="1"/>
+                            <TextBlock Text="BaudRate" VerticalAlignment="Center" Margin="10,0,5,0" Grid.Column="2" HorizontalAlignment="Right"/>
+                            <TextBox Text="{Binding Main.BaudRate}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLines="1" MaxLength="7" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}, Source={StaticResource Locator}}" Grid.Column="3"/>
+                            <Button Content="Open" Margin="5,0,0,0" VerticalAlignment="Center" Command="{Binding Main.OpenPMCommand}" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}, Source={StaticResource Locator}}" Grid.Column="4"/>
+                            <Button Content="Close" Margin="5,0,0,0" VerticalAlignment="Center" Command="{Binding Main.ClosePMCommand}" IsEnabled="{Binding Main.IsOpened}" Grid.Column="5"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="RANGE" Grid.Row="1" Margin="0,5">
+                        <ListBox SelectedValue="{Binding Main.CurrentRange, Delay=20}" SelectedValuePath="Tag" Style="{StaticResource HorizontalRadioButtonList}">
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE1}" Content="R1"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE2}" Content="R2"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE3}" Content="R3"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE4}" Content="R4"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE5}" Content="R5"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE6}" Content="R6"/>
+                        </ListBox>
+                    </GroupBox>
+
+                    <Grid Grid.Row="2" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="2"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="UNIT" >
+                            <ListBox SelectedValue="{Binding Main.CurrentUnit, Delay=20}" SelectedValuePath="Tag" Style="{StaticResource HorizontalRadioButtonList}">
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.dBm}" Content="dBm"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mW}" Content="W"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mA}" Content="A"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mV}" Content="V"/>
+                            </ListBox>
+                        </GroupBox>
+                        <GroupBox Header="Wavelength" Grid.Column="2" Padding="5" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="142*"/>
+                                    <ColumnDefinition Width="59*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="txtWavlength" Text="{Binding Main.CurrentWavelength, Mode=OneWay}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,5,0" FontSize="24" MaxLength="4" MaxLines="1"/>
+                                <Button Content="SET" Grid.Column="1" Command="{Binding Main.SetWavCommand, Mode=OneWay}" CommandParameter="{Binding Text, ElementName=txtWavlength}" />
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Calibration" BorderBrush="{x:Null}" Background="{x:Null}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <dxprg:PropertyGridControl 
+                        HeaderColumnWidth="200"
+                        ShowProperties="WithPropertyDefinitions"
+                        ExpandCategoriesWhenSelectedObjectChanged="True"
+                        SelectedObject="{Binding Main.CalibrationHelper}" Margin="0,0,0,5">
+                        <dxprg:PropertyGridControl.PropertyDefinitions>
+                            <dxprg:PropertyDefinition Path="ADBackgroundNoise"/>
+                            <dxprg:PropertyDefinition Path="PDDarkCurrent"/>
+                            <dxprg:CollectionDefinition Path="Res" Type="{x:Type sys:Double[]}" AllowRemoveItems="False" AllowNewItemInitializer="False" AllowInstanceInitializer="False">
+                                <dxprg:PropertyDefinition Path="*."/>
+                            </dxprg:CollectionDefinition>
+                        </dxprg:PropertyGridControl.PropertyDefinitions>
+                    </dxprg:PropertyGridControl>
+
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="140"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Button Content="Import" Grid.Column="0"/>
+                        <Button Content="Export" Grid.Column="1"/>
+                        <Button Content="Refresh" Grid.Column="3"/>
+                        <Button Content="Set" Grid.Column="4"/>
+                        <Button Content="Write to Flash" Grid.Column="6" Background="Red"/>
+
+                    </Grid>
+                </Grid>
+                <!--<Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,0,5,0"/>
+                            </Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Grid.Column" Value="1"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </Grid.Resources>
+                        <TextBlock Text="AD Back-Noise (mV)"/>
+                        <TextBox Text="{Binding Main.CalibrationHelper.ADBackgroundNoise}"/>
+
+                        <TextBlock Grid.Row="1" Text="PD Dark-Current (uA)"/>
+                        <TextBox Grid.Row="1" Text="{Binding Main.CalibrationHelper.PDDarkCurrent}"/>
+                    </Grid>-->
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+</Window>

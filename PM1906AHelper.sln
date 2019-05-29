@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM1906AHelper", "PM1906AHel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM1906AHelperTests", "PM1906AHelperTests\PM1906AHelperTests.csproj", "{52E039FF-F9A2-4FA6-BC5A-50B9DAB3B99E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM1906A_GUI", "PM1906A_GUI\PM1906A_GUI.csproj", "{BF8EE4DF-248A-4D0C-9AAB-A7E5F17F2876}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{52E039FF-F9A2-4FA6-BC5A-50B9DAB3B99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52E039FF-F9A2-4FA6-BC5A-50B9DAB3B99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52E039FF-F9A2-4FA6-BC5A-50B9DAB3B99E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF8EE4DF-248A-4D0C-9AAB-A7E5F17F2876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8EE4DF-248A-4D0C-9AAB-A7E5F17F2876}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8EE4DF-248A-4D0C-9AAB-A7E5F17F2876}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8EE4DF-248A-4D0C-9AAB-A7E5F17F2876}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

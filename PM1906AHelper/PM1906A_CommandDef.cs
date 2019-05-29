@@ -14,5 +14,6 @@ namespace PM1906AHelper
         private const string CMD_READ = "READ?";
         private const string CMD_RANGE = "RANGE";
         private const string CMD_UNIT = "UNIT";
+        private const string CMD_WAV = "WAV";
     }
 }

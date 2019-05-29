@@ -31,7 +31,7 @@ namespace PM1906AHelper
         /// <summary>
         /// Set the factors of the calibration function of each range of each wavelength
         /// </summary>
-        private string CMD_CAL_SET = "__CAL_SET";
+        private string CMD_CAL_FUNC = "__CAL_FUNC";
 
         /// <summary>
         /// Set the dark current of the PD in uA.

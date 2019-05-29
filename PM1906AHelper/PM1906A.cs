@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PM1906AHelper.Core;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -141,11 +142,31 @@ namespace PM1906AHelper
 
         public void SetUnit(UnitEnum Unit)
         {
-            var cmd = $"{CMD_UNIT} {((int)Unit + 1)}";
-            port.WriteLine(cmd);
-
-            Thread.Sleep(10);
+            var cmd = $"{CMD_UNIT} {Unit}";
+            _write(cmd);
         }
+
+        public void GetWavelength(out int Wav)
+        {
+            Wav = 0;
+            var monkey = _query($"{CMD_WAV}?");
+            try
+            {
+                var pig = monkey.Split(' ');
+                Wav = Convert.ToInt32(pig[0]);
+            }
+            catch
+            {
+                _throw_excpetion(monkey);
+            }
+        }
+
+        public void SetWavelength(int Wav)
+        {
+            var cmd = $"{CMD_WAV} {Wav}";
+            _write(cmd);
+        }
+
         #endregion
 
         #region IDisposable Support

@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace PM1906AHelper.Calibration
 {
     public class FuncPerWav
     {
+        [ReadOnly(true)]
         /// <summary>
         /// Get or set the wavelength.
         /// </summary>
-        public int WL { get; set; }
+        public int Wavelength { get; set; }
 
-        public FuncPerRange[] PARAM { get; set; }
+        [DisplayName("Functions")]
+        public FuncPerRange[] Funcs { get; set; }
 
         public override string ToString()
         {
-            return $"{WL}nm";
+            return $"{Wavelength}nm, {Funcs.Length} functions";
         }
 
     }

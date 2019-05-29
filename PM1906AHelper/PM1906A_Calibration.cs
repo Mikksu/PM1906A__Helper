@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PM1906AHelper.Core;
 using System.Threading;
 
 namespace PM1906AHelper
@@ -22,6 +23,8 @@ namespace PM1906AHelper
             var json = _query(CMD_CAL_GET);
 
             CalHelper = JsonConvert.DeserializeObject<Calibration.Helper>(json);
+
+            CalHelper.RawJson = json;
         }
 
         /// <summary>
@@ -55,9 +58,9 @@ namespace PM1906AHelper
             _write($"{CMD_CAL_RES} {(int)Range},{Res}");
         }
 
-        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B)
+        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C)
         {
-            _write($"{CMD_CAL_SET} {(int)Wavelen},{(int)Range},{A},{B}");
+            _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C}");
         }
     }
 }
