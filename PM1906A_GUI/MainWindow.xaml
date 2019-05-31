@@ -5,31 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:PM1906A_GUI"
+        xmlns:pgview ="clr-namespace:PM1906A_GUI.PGView"
         xmlns:PM1906AHelperCore="clr-namespace:PM1906AHelper.Core;assembly=PM1906AHelper"
         xmlns:PM1906AHelperCal="clr-namespace:PM1906AHelper.Calibration;assembly=PM1906AHelper"
         xmlns:Converter="clr-namespace:PM1906A_GUI.Converter" 
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
         xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
         x:Class="PM1906A_GUI.MainWindow"
         mc:Ignorable="d"
-        Title="PM1906A Control Panel" Height="450" Width="600" WindowStartupLocation="CenterScreen">
+        Title="PM1906A Control Panel" Height="600" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <Converter:EnumerateConverter x:Key="EnumerateConverter"/>
 
         <Converter:ConvertReverseBoolean x:Key="ConvertReverseBoolean"/>
 
+        <pgview:PropertyDefinitionTemplateSelector x:Key="PropertyDefinitionTemplateSelector"/>
+
+        <DataTemplate x:Key="PropertyTemplate">
+            <dxprg:PropertyDefinition Path="{Binding Name}" />
+        </DataTemplate>
+        <DataTemplate x:Key="CollectionTemplate">
+            <dxprg:CollectionDefinition Path="{Binding CollectionName}" />
+        </DataTemplate>
+
     </Window.Resources>
     <Grid DataContext="{Binding Source={StaticResource Locator}}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <!-- Measurement display panel -->
         <Grid Background="#FFFF7729">
 
-            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="80" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Agency FB" FontWeight="ExtraBold"/>
+            <!-- Power Display -->
+            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay, StringFormat={}{0:0.000000}}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="80" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
+            
+            <!-- Wavelength display -->
             <Border Grid.Row="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Padding="2" Background="#22000000">
                 <TextBlock Text="{Binding Main.CurrentWavelength, StringFormat=\{0\} nm}" Foreground="White"/>
             </Border>
@@ -66,6 +81,9 @@
             </Grid>
 
         </Grid>
+
+        <!-- Splitter -->
+        <Border Grid.Row="1" Background="#FFFFB255"/>
 
         <!-- Control Panel -->
         <TabControl Grid.Row="2" TabStripPlacement="Bottom" Background="{x:Null}" BorderBrush="{x:Null}">
@@ -144,21 +162,45 @@
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
-                    <dxprg:PropertyGridControl 
+                    <dxprg:PropertyGridControl
                         HeaderColumnWidth="200"
                         ShowProperties="WithPropertyDefinitions"
                         ExpandCategoriesWhenSelectedObjectChanged="True"
-                        SelectedObject="{Binding Main.CalibrationHelper}" Margin="0,0,0,5">
+                        SelectedObject="{Binding Main.CalibrationHelper}"
+                        Margin="0,0,0,10">
+                        <dxprg:PropertyGridControl.Resources>
+                            <Style TargetType="{x:Type dxprg:CollectionDefinition}">
+                                <Setter Property="AllowAddItems" Value="False"/>
+                                <Setter Property="AllowNewItemInitializer" Value="False"/>
+                                <Setter Property="AllowRemoveItems" Value="False"/>
+                                
+                            </Style>
+                        </dxprg:PropertyGridControl.Resources>
+                        
                         <dxprg:PropertyGridControl.PropertyDefinitions>
-                            <dxprg:PropertyDefinition Path="ADBackgroundNoise"/>
-                            <dxprg:PropertyDefinition Path="PDDarkCurrent"/>
-                            <dxprg:CollectionDefinition Path="Res" Type="{x:Type sys:Double[]}" AllowRemoveItems="False" AllowNewItemInitializer="False" AllowInstanceInitializer="False">
-                                <dxprg:PropertyDefinition Path="*."/>
+                            <dxprg:PropertyDefinition Path="ADBackgroundNoise" ShowMenuButton="False"/>
+                            <dxprg:PropertyDefinition Path="PDDarkCurrent" ShowMenuButton="False"/>
+                            <dxprg:CollectionDefinition Path="Res" Type="{x:Type sys:Double[]}">
+                                <dxprg:CollectionDefinition.MenuCustomizations>
+                                    <dxb:RemoveAction ElementName="{x:Static dxprg:BarItemNames.Refresh}" />
+                                    <dxb:RemoveAction ElementName="{x:Static dxprg:BarItemNames.Reset}" />
+                                    <dxb:BarButtonItem Content="Set"  dxb:CollectionAction.Index="0" />
+                                </dxprg:CollectionDefinition.MenuCustomizations>
+                                <dxprg:PropertyDefinition Path="*." />
+                            </dxprg:CollectionDefinition>
+                            <dxprg:CollectionDefinition Path="FuncsPerWavelength" Type="{x:Type PM1906AHelperCal:FuncPerWav[]}">
+                                <dxprg:PropertyDefinition Path="*.Wavelength" />
+                                <dxprg:CollectionDefinition Path="*.Funcs" Type="{x:Type PM1906AHelperCal:FuncPerRange[]}">
+                                    <dxprg:PropertyDefinition Path="*.Range" />
+                                    <dxprg:PropertyDefinition Path="*.A" />
+                                    <dxprg:PropertyDefinition Path="*.B" />
+                                    <dxprg:PropertyDefinition Path="*.C" />
+                                </dxprg:CollectionDefinition>
                             </dxprg:CollectionDefinition>
                         </dxprg:PropertyGridControl.PropertyDefinitions>
+                        
                     </dxprg:PropertyGridControl>
-
-
+                    
                     <Grid Grid.Row="1" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
@@ -174,12 +216,18 @@
                                 <Setter Property="Margin" Value="2"/>
                             </Style>
                         </Grid.Resources>
-                        <Button Content="Import" Grid.Column="0"/>
-                        <Button Content="Export" Grid.Column="1"/>
-                        <Button Content="Refresh" Grid.Column="3"/>
-                        <Button Content="Set" Grid.Column="4"/>
-                        <Button Content="Write to Flash" Grid.Column="6" Background="Red"/>
-
+                        <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}"/>
+                        <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}"/>
+                        <Button Content="Refresh" Grid.Column="3" 
+                                Command="{Binding Main.ReloadCalParamsCommand}"
+                                ToolTip="Reload the calibration settings from the device"/>
+                        <Button Content="Set All" Grid.Column="4"
+                                Command="{Binding Main.SetCalParamsCommand}"
+                                CommandParameter="{Binding Main.CalibrationHelper}"
+                                ToolTip="Set all the calibration settings to the device"/>
+                        <Button Content="Write to Flash" Grid.Column="6" Background="Red" 
+                                ToolTip="Save the calibration settings to the flash"/>
+                        
                     </Grid>
                 </Grid>
                 <!--<Grid>

@@ -1,9 +1,11 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using PM1906AHelper;
 using PM1906AHelper.Calibration;
 using PM1906AHelper.Core;
 using System;
+using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,10 +39,10 @@ namespace PM1906A_GUI.ViewModel
         private int _baudrate = 921600;
         private bool _is_opened = false;
         private double _current_power = -61.2;
+        private int _current_wav = 1310;
         private RangeEnum _current_range = RangeEnum.RANGE1;
         private UnitEnum _current_unit = UnitEnum.dBm;
-        private int _current_wav = 1310;
-        private Helper _cal_helper;
+        private CalibrationHelper _cal_helper;
 
         #endregion
 
@@ -49,8 +51,27 @@ namespace PM1906A_GUI.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            this.CalibrationHelper = new Helper();
+            // generate fake data to debug
+            this.CalibrationHelper = new CalibrationHelper();
             this.CalibrationHelper.ADBackgroundNoise = 12.5;
+            this.CalibrationHelper.Res = new double[] { 14567897986.1 };
+            this.CalibrationHelper.FuncsPerWavelength = new FuncPerWav[]
+            {
+                new FuncPerWav()
+                {
+                    Wavelength = 1310,
+                    Funcs = new FuncPerRange[]
+                    {
+                        new FuncPerRange()
+                        {
+                            Range = 1,
+                            A = 131,
+                            B = 12,
+                            C = 0.12
+                        }
+                    }
+                }
+            };
         }
 
         #region Properties
@@ -198,7 +219,7 @@ namespace PM1906A_GUI.ViewModel
             }
         }
 
-        public Helper CalibrationHelper
+        public CalibrationHelper CalibrationHelper
         {
             get
             {
@@ -231,7 +252,7 @@ namespace PM1906A_GUI.ViewModel
             pm.GetWavelength(out int wav);
             this.CurrentWavelength = wav;
 
-            pm.ReadCalParam(out Helper calhelper);
+            pm.ReadCalParam(out CalibrationHelper calhelper);
             this.CalibrationHelper = calhelper;
 
         }
@@ -371,6 +392,143 @@ namespace PM1906A_GUI.ViewModel
                     }
                     catch(Exception ex)
                     {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand ReloadCalParamsCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    lock(pmLocker)
+                    {
+                        pm.ReadCalParam(out CalibrationHelper calhelper);
+                        this.CalibrationHelper = calhelper;
+                    }
+                });
+            }
+        }
+
+        public RelayCommand<CalibrationHelper> SetCalParamsCommand
+        {
+            get
+            {
+                return new RelayCommand<CalibrationHelper>(param =>
+                {
+                    try
+                    {
+                        lock(pmLocker)
+                        {
+                            // write AD back-noise
+                            pm.SetADCBackgroundNoise(param.ADBackgroundNoise);
+
+                            // write PD Dark-current
+                            pm.SetDarkCurrent(param.PDDarkCurrent);
+
+                            // write Resistors
+                            foreach (RangeEnum range in Enum.GetValues(typeof(RangeEnum)))
+                                pm.SetSamplingResistance(range, param.Res[(int)range]);
+
+                            // write functions
+                            foreach (var fpwave in param.FuncsPerWavelength)
+                            {
+                                var wav = (WavelengthEnum)fpwave.Wavelength;
+                                foreach (var fun in fpwave.Funcs)
+                                {
+                                    pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C);
+                                }
+                            }
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand SaveCalParamToFlashCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        lock(pmLocker)
+                        {
+                            pm.SaveCalParam();
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand ExportCalParamsToJsonCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        var json = this.CalibrationHelper.ToJson();
+
+                        SaveFileDialog dlg = new SaveFileDialog();
+                        dlg.Filter = "Json|*.json";
+                        dlg.DefaultExt = ".json";
+                        dlg.AddExtension = true;
+                        var ret = dlg.ShowDialog();
+                        if(ret.HasValue && ret.Value)
+                        {
+                            File.WriteAllText(dlg.FileName, json);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                });
+            }
+        }
+
+        public RelayCommand ImportCalParamsFromJson
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        OpenFileDialog dlg = new OpenFileDialog();
+                        dlg.Filter = "Json|*.json";
+                        dlg.Multiselect = false;
+                        var ret = dlg.ShowDialog();
+                        if(ret.HasValue && ret.Value)
+                        {
+                            try
+                            {
+                                var json = File.ReadAllText(dlg.FileName);
+                                this.CalibrationHelper = CalibrationHelper.FromJson(json);
+                            }
+                            catch(Exception)
+                            {
+                                MessageBox.Show($"Unrecognized json file opened.");                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
                         MessageBox.Show(ex.Message);
                     }
                 });

@@ -1,6 +1,7 @@
 ﻿using PM1906AHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using PM1906AHelper.Core;
 
 namespace PM1906AHelper.Tests
 {
@@ -75,7 +76,7 @@ namespace PM1906AHelper.Tests
 
                 Trace.WriteLine(idn);
 
-                pm.ReadCalParam(out Calibration.Helper CalHelper);
+                pm.ReadCalParam(out Calibration.CalibrationHelper CalHelper);
             }
         }
 
@@ -92,7 +93,7 @@ namespace PM1906AHelper.Tests
 
                 
                 pm.SetSamplingResistance(RangeEnum.RANGE2, 1.0);
-                pm.ReadCalParam(out Calibration.Helper calHelper);
+                pm.ReadCalParam(out Calibration.CalibrationHelper calHelper);
 
                 Assert.AreEqual(calHelper.Res[(int)RangeEnum.RANGE2], 1.0);
 

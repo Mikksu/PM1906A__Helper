@@ -36,11 +36,11 @@ namespace PM1906AHelper
         /// <summary>
         /// Set the dark current of the PD in uA.
         /// </summary>
-        private string CMD_CAL_PDDC = "__CALPDDC";
+        private string CMD_CAL_PDDC = "__CAL_PDDC";
 
         /// <summary>
         /// Set the background noise of the ADC in mV.
         /// </summary>
-        private string CMD_CAL_ADBN = "__CALADBN";
+        private string CMD_CAL_ADBN = "__CAL_ADBN";
     }
 }

@@ -18,13 +18,11 @@ namespace PM1906AHelper
         /// Read the calibration parameters from the device as the JSON string.
         /// </summary>
         /// <param name="CalHelper"></param>
-        public void ReadCalParam(out Calibration.Helper CalHelper)
+        public void ReadCalParam(out Calibration.CalibrationHelper CalHelper)
         {
             var json = _query(CMD_CAL_GET);
 
-            CalHelper = JsonConvert.DeserializeObject<Calibration.Helper>(json);
-
-            CalHelper.RawJson = json;
+            CalHelper = Calibration.CalibrationHelper.FromJson(json);
         }
 
         /// <summary>

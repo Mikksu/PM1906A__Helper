@@ -10,6 +10,7 @@ namespace PM1906AHelper.Calibration
         private double _c;
 
         [ReadOnly(true)]
+        [Browsable(false)]
         public int Range { get; set; }
 
         public double A

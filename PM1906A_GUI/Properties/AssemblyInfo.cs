@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PM1906A_GUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("The application to control  and calibrate the PM1906A")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PM1906A_GUI")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Irixi")]
+[assembly: AssemblyProduct("PM1906A")]
+[assembly: AssemblyCopyright("IRIXI Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -53,3 +53,6 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: Guid("AD2E5E5F-1489-48E5-AC5B-23C2C7851173")]
+[assembly: NeutralResourcesLanguage("en-US")]
+

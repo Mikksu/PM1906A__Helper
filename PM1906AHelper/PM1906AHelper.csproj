@@ -59,11 +59,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calibration\Helper.cs" />
+    <Compile Include="Calibration\CalibrationHelper.cs" />
     <Compile Include="Calibration\FuncPerRange.cs" />
     <Compile Include="Calibration\FuncPerWav.cs" />
     <Compile Include="Core\GlobalDef.cs" />
     <Compile Include="Core\NotifiableClassBase.cs" />
+    <Compile Include="Core\Property.cs" />
     <Compile Include="PM1906A.cs" />
     <Compile Include="PM1906A_Calibration.cs" />
     <Compile Include="PM1906A_CommandCalibration.cs" />

@@ -5,6 +5,7 @@ namespace PM1906AHelper.Calibration
     public class FuncPerWav
     {
         [ReadOnly(true)]
+        [Browsable(false)]
         /// <summary>
         /// Get or set the wavelength.
         /// </summary>
@@ -15,7 +16,7 @@ namespace PM1906AHelper.Calibration
 
         public override string ToString()
         {
-            return $"{Wavelength}nm, {Funcs.Length} functions";
+            return $"{Wavelength}nm";
         }
 
     }
