@@ -226,7 +226,8 @@
                                 CommandParameter="{Binding Main.CalibrationHelper}"
                                 ToolTip="Set all the calibration settings to the device"/>
                         <Button Content="Write to Flash" Grid.Column="6" Background="Red" 
-                                ToolTip="Save the calibration settings to the flash"/>
+                                ToolTip="Save the calibration settings to the flash"
+                                Command="{Binding Main.SaveCalParamToFlashCommand}"/>
                         
                     </Grid>
                 </Grid>
