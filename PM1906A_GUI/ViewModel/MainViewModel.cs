@@ -43,6 +43,7 @@ namespace PM1906A_GUI.ViewModel
         private RangeEnum _current_range = RangeEnum.RANGE1;
         private UnitEnum _current_unit = UnitEnum.dBm;
         private CalibrationHelper _cal_helper;
+        private string _current_power_formatted = "";
 
         #endregion
 
@@ -132,6 +133,22 @@ namespace PM1906A_GUI.ViewModel
             private set
             {
                 _current_power = value;
+                RaisePropertyChanged();
+
+                PM1906A.FormatOutputPower(CurrentUnit, CurrentRange, value, out string formatted);
+                CurrentPowerFormatted = formatted;
+            }
+        }
+
+        public string CurrentPowerFormatted
+        {
+            get
+            {
+                return _current_power_formatted;
+            }
+            private set
+            {
+                _current_power_formatted = value;
                 RaisePropertyChanged();
             }
         }

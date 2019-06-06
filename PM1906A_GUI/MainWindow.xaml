@@ -42,7 +42,7 @@
         <Grid Background="#FFFF7729">
 
             <!-- Power Display -->
-            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay, StringFormat={}{0:0.000000000}}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="48" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
+            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPowerFormatted, Mode=OneWay}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="48" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
             
             <!-- Wavelength display -->
             <Border Grid.Row="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Padding="2" Background="#22000000">

@@ -164,6 +164,32 @@ namespace PM1906AHelper
             _write(cmd);
         }
 
+        /// <summary>
+        /// Format the optical power value accorrding to the Unit and Range.
+        /// </summary>
+        /// <param name="Unit"></param>
+        /// <param name="Range"></param>
+        /// <param name="Power"></param>
+        /// <param name="Formatted"></param>
+        public static void FormatOutputPower(UnitEnum Unit, RangeEnum Range, double Power, out string Formatted)
+        {
+            Formatted = "";
+
+            switch (Unit)
+            {
+                case UnitEnum.dBm:
+                    Formatted = Power.ToString("F2");
+                    break;
+
+                case UnitEnum.mW:
+                case UnitEnum.mA:
+                case UnitEnum.mV:
+                    var tmp = Power.ToString("F7");
+                    Formatted = tmp.Remove(tmp.Length - 1 - (int)Range);
+                    break;
+            }
+        }
+
         #endregion
 
         #region IDisposable Support
