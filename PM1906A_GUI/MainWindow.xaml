@@ -42,7 +42,7 @@
         <Grid Background="#FFFF7729">
 
             <!-- Power Display -->
-            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay, StringFormat={}{0:0.000000}}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="80" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
+            <TextBox Grid.Row="1" Text="{Binding Main.CurrentPower, Mode=OneWay, StringFormat={}{0:0.000000000}}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="48" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
             
             <!-- Wavelength display -->
             <Border Grid.Row="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Padding="2" Background="#22000000">
@@ -173,13 +173,12 @@
                                 <Setter Property="AllowAddItems" Value="False"/>
                                 <Setter Property="AllowNewItemInitializer" Value="False"/>
                                 <Setter Property="AllowRemoveItems" Value="False"/>
-                                
+
                             </Style>
                         </dxprg:PropertyGridControl.Resources>
-                        
+
                         <dxprg:PropertyGridControl.PropertyDefinitions>
                             <dxprg:PropertyDefinition Path="ADBackgroundNoise" ShowMenuButton="False"/>
-                            <dxprg:PropertyDefinition Path="PDDarkCurrent" ShowMenuButton="False"/>
                             <dxprg:CollectionDefinition Path="Res" Type="{x:Type sys:Double[]}">
                                 <dxprg:CollectionDefinition.MenuCustomizations>
                                     <dxb:RemoveAction ElementName="{x:Static dxprg:BarItemNames.Refresh}" />
@@ -195,14 +194,16 @@
                                     <dxprg:PropertyDefinition Path="*.A" />
                                     <dxprg:PropertyDefinition Path="*.B" />
                                     <dxprg:PropertyDefinition Path="*.C" />
+                                    <dxprg:PropertyDefinition Path="*.DC" />
                                 </dxprg:CollectionDefinition>
                             </dxprg:CollectionDefinition>
                         </dxprg:PropertyGridControl.PropertyDefinitions>
-                        
+
                     </dxprg:PropertyGridControl>
-                    
+
                     <Grid Grid.Row="1" Grid.Column="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="1*"/>
@@ -218,51 +219,20 @@
                         </Grid.Resources>
                         <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}"/>
                         <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}"/>
-                        <Button Content="Refresh" Grid.Column="3" 
+                        <Button Content="Default" Grid.Column="2" Command="{Binding Main.SetToDefault}"/>
+                        <Button Content="Reload" Grid.Column="4" 
                                 Command="{Binding Main.ReloadCalParamsCommand}"
                                 ToolTip="Reload the calibration settings from the device"/>
-                        <Button Content="Set All" Grid.Column="4"
+                        <Button Content="Send" Grid.Column="5"
                                 Command="{Binding Main.SetCalParamsCommand}"
                                 CommandParameter="{Binding Main.CalibrationHelper}"
                                 ToolTip="Set all the calibration settings to the device"/>
-                        <Button Content="Write to Flash" Grid.Column="6" Background="Red" 
+                        <Button Content="Write to Flash" Grid.Column="7" Background="Red" 
                                 ToolTip="Save the calibration settings to the flash"
                                 Command="{Binding Main.SaveCalParamToFlashCommand}"/>
-                        
+
                     </Grid>
                 </Grid>
-                <!--<Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="120"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Right"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Margin" Value="0,0,5,0"/>
-                            </Style>
-                            <Style TargetType="TextBox">
-                                <Setter Property="Grid.Column" Value="1"/>
-                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </Grid.Resources>
-                        <TextBlock Text="AD Back-Noise (mV)"/>
-                        <TextBox Text="{Binding Main.CalibrationHelper.ADBackgroundNoise}"/>
-
-                        <TextBlock Grid.Row="1" Text="PD Dark-Current (uA)"/>
-                        <TextBox Grid.Row="1" Text="{Binding Main.CalibrationHelper.PDDarkCurrent}"/>
-                    </Grid>-->
             </TabItem>
 
         </TabControl>

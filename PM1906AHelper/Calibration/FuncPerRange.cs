@@ -8,6 +8,7 @@ namespace PM1906AHelper.Calibration
         private double _a;
         private double _b;
         private double _c;
+        private double _darkcurrent;
 
         [ReadOnly(true)]
         [Browsable(false)]
@@ -49,7 +50,20 @@ namespace PM1906AHelper.Calibration
             }
         }
 
+        [DisplayName("Dark Current(mA)")]
+        public double DC
+        {
+            get
+            {
+                return _darkcurrent;
+            }
+            set
+            {
+                UpdateProperty(ref _darkcurrent, value);
+            }
+        }
 
+        
         public override string ToString()
         {
             // return $"{A} * x^2 + {B} * x + {C}";

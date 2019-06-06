@@ -252,8 +252,15 @@ namespace PM1906A_GUI.ViewModel
             pm.GetWavelength(out int wav);
             this.CurrentWavelength = wav;
 
-            pm.ReadCalParam(out CalibrationHelper calhelper);
-            this.CalibrationHelper = calhelper;
+            try
+            {
+                pm.ReadCalParam(out CalibrationHelper calhelper);
+                this.CalibrationHelper = calhelper;
+            }
+            catch(Exception)
+            {
+
+            }
 
         }
 
@@ -425,10 +432,7 @@ namespace PM1906A_GUI.ViewModel
                         {
                             // write AD back-noise
                             pm.SetADCBackgroundNoise(param.ADBackgroundNoise);
-
-                            // write PD Dark-current
-                            pm.SetDarkCurrent(param.PDDarkCurrent);
-
+                            
                             // write Resistors
                             foreach (RangeEnum range in Enum.GetValues(typeof(RangeEnum)))
                                 pm.SetSamplingResistance(range, param.Res[(int)range]);
@@ -439,7 +443,7 @@ namespace PM1906A_GUI.ViewModel
                                 var wav = (WavelengthEnum)fpwave.Wavelength;
                                 foreach (var fun in fpwave.Funcs)
                                 {
-                                    pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C);
+                                    pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C, fun.DC);
                                 }
                             }
                         }
@@ -466,6 +470,27 @@ namespace PM1906A_GUI.ViewModel
                         }
                     }
                     catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand SetToDefault
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        lock (pmLocker)
+                        {
+                            pm.ResetCalParamToDefault();
+                        }
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }

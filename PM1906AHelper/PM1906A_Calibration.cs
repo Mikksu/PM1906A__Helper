@@ -34,15 +34,6 @@ namespace PM1906AHelper
         }
 
         /// <summary>
-        /// Set the dark current.
-        /// </summary>
-        /// <param name="DC_uA">Dark Current in uA</param>
-        public void SetDarkCurrent(double DC_uA)
-        {
-            _write($"{CMD_CAL_PDDC} {DC_uA}");
-        }
-
-        /// <summary>
         /// Set the background noise of the inner ADC.
         /// </summary>
         /// <param name="BN_mV">Background Noise in mV.</param>
@@ -56,9 +47,9 @@ namespace PM1906AHelper
             _write($"{CMD_CAL_RES} {(int)Range},{Res}");
         }
 
-        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C)
+        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C, double DarkCurrent)
         {
-            _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C}");
+            _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C},{DarkCurrent}");
         }
     }
 }
