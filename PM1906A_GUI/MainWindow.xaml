@@ -72,12 +72,12 @@
                 </Grid.Resources>
                 <TextBlock Text="dBm" 
                            Opacity="{Binding Main.CurrentUnit, ConverterParameter=dBm, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="mW" Grid.Row="1" 
-                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mW, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="mA" Grid.Row="2" 
-                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mA, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="mV" Grid.Row="3" 
-                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=mV, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="W" Grid.Row="1" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=W, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="A" Grid.Row="2" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=A, Converter={StaticResource opacityConverter}}"/>
+                <TextBlock Text="V" Grid.Row="3" 
+                           Opacity="{Binding Main.CurrentUnit, ConverterParameter=V, Converter={StaticResource opacityConverter}}"/>
             </Grid>
 
         </Grid>
@@ -137,9 +137,9 @@
                         <GroupBox Header="UNIT" >
                             <ListBox SelectedValue="{Binding Main.CurrentUnit, Delay=20}" SelectedValuePath="Tag" Style="{StaticResource HorizontalRadioButtonList}">
                                 <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.dBm}" Content="dBm"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mW}" Content="W"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mA}" Content="A"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.mV}" Content="V"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.W}" Content="W"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.A}" Content="A"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.V}" Content="V"/>
                             </ListBox>
                         </GroupBox>
                         <GroupBox Header="Wavelength" Grid.Column="2" Padding="5" >

@@ -3,9 +3,9 @@
     public enum UnitEnum
     {
         dBm,
-        mW,
-        mV,
-        mA
+        W,
+        V,
+        A
     }
 
     public enum RangeEnum

@@ -29,12 +29,8 @@ namespace PM1906AHelper.Calibration
         public ObservableCollection<Property> Properties { get; set; }
 
         [Category("Basic")]
-        [DisplayName("AD Background Noise(mV)")]
+        [DisplayName("AD Background Noise(V)")]
         public double ADBackgroundNoise { get; set; }
-
-        [Category("Basic")]
-        [DisplayName("PD Dark Current(uA)")]
-        public double PDDarkCurrent { get; set; }
 
         [Category("Basic")]
         [DisplayName("Rsistance(ohm)")]

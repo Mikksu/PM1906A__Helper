@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using PM1906AHelper.Core;
-using System.Threading;
+﻿using PM1906AHelper.Core;
 
 namespace PM1906AHelper
 {

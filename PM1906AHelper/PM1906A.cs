@@ -1,7 +1,6 @@
 ﻿using PM1906AHelper.Core;
 using System;
 using System.IO.Ports;
-using System.Linq;
 using System.Threading;
 
 namespace PM1906AHelper
@@ -93,6 +92,9 @@ namespace PM1906AHelper
             {
                 Value = Convert.ToDouble(pig[0]);
                 Unit = (UnitEnum)Enum.Parse(typeof(UnitEnum), pig[1]);
+
+                //if (Unit != UnitEnum.dBm)
+                //    Value /= 1000;
             }
             catch
             {
@@ -178,13 +180,13 @@ namespace PM1906AHelper
             switch (Unit)
             {
                 case UnitEnum.dBm:
-                    Formatted = Power.ToString("F2");
+                    Formatted = Power.ToString("F3");
                     break;
 
-                case UnitEnum.mW:
-                case UnitEnum.mA:
-                case UnitEnum.mV:
-                    var tmp = Power.ToString("F7");
+                case UnitEnum.W:
+                case UnitEnum.A:
+                case UnitEnum.V:
+                    var tmp = Power.ToString("F10");
                     Formatted = tmp.Remove(tmp.Length - 1 - (int)Range);
                     break;
             }

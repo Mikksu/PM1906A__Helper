@@ -50,7 +50,7 @@ namespace PM1906AHelper.Calibration
             }
         }
 
-        [DisplayName("Dark Current(mA)")]
+        [DisplayName("Dark Current(A)")]
         public double DC
         {
             get
