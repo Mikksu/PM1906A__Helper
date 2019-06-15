@@ -38,6 +38,9 @@ namespace PM1906AHelper
 
         private string _query(string command)
         {
+            // clear the recevie buffer.
+            port.ReadExisting();
+
             port.WriteLine(command);
             var str = port.ReadLine();
             return str.Replace("\r", "").Replace("\n", "");
