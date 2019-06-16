@@ -281,7 +281,7 @@ namespace PM1906A_GUI.ViewModel
 
         }
 
-        private void StartReadPower(IProgress<(double Power, UnitEnum Unit)> ProgressReporter, CancellationToken cancelToken)
+        private void StartToReadPower(IProgress<(double Power, UnitEnum Unit)> ProgressReporter, CancellationToken cancelToken)
         {
             Task.Run(() =>
             {
@@ -307,7 +307,7 @@ namespace PM1906A_GUI.ViewModel
                     }
                     finally
                     {
-                        Task.Delay(10);
+                        Task.Delay(50);
                     }
 
                 }
@@ -350,7 +350,7 @@ namespace PM1906A_GUI.ViewModel
 
                         cts = new CancellationTokenSource();
 
-                        StartReadPower(progress, cts.Token);
+                        StartToReadPower(progress, cts.Token);
 
                     }
                     catch (Exception ex)
@@ -373,7 +373,11 @@ namespace PM1906A_GUI.ViewModel
                         {
                             try
                             {
-                                pm.Close();
+                                cts.Cancel();
+                                lock (pmLocker)
+                                {
+                                    pm.Close();
+                                }
                             }
                             catch
                             {
