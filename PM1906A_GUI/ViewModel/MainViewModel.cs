@@ -301,13 +301,13 @@ namespace PM1906A_GUI.ViewModel
                             ProgressReporter.Report((power, unit));
                         }
                     }
-                    catch(Exception ex)
+                    catch(Exception)
                     {
-
+                        Thread.Sleep(500);
                     }
                     finally
                     {
-                        Task.Delay(50);
+                        Thread.Sleep(50);
                     }
 
                 }
