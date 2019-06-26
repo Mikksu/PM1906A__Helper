@@ -12,6 +12,8 @@ namespace PM1906AHelper
 
         SerialPort port;
 
+        FirFilter fir_filter;
+
         #endregion
 
         #region Constructors
@@ -20,6 +22,8 @@ namespace PM1906AHelper
         {
             port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One);
             port.ReadTimeout = 2000;
+
+            fir_filter = new FirFilter(10);
         }
 
         #endregion
@@ -93,8 +97,12 @@ namespace PM1906AHelper
 
             try
             {
-                Value = Convert.ToDouble(pig[0]);
+
+                var dog = Convert.ToDouble(pig[0]);
                 Unit = (UnitEnum)Enum.Parse(typeof(UnitEnum), pig[1]);
+
+                // filter the power.
+                Value = fir_filter.Filter(dog);
 
                 //if (Unit != UnitEnum.dBm)
                 //    Value /= 1000;

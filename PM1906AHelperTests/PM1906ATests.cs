@@ -2,6 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using PM1906AHelper.Core;
+using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace PM1906AHelper.Tests
 {
@@ -103,5 +106,87 @@ namespace PM1906AHelper.Tests
                 Assert.AreEqual(calHelper.Res[(int)RangeEnum.RANGE2], 166065.0);
             }
         }
+
+        [TestMethod]
+        public void FIR_Filter_Test()
+        {
+            double y;
+
+            FIRCreateCoeff();
+
+            var filename = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+
+            Random r = new Random();
+
+            using(StreamWriter wr = File.CreateText(filename))
+            {
+                while (true)
+                {
+                    y = Smooth(r.NextDouble() * 10);
+
+                    wr.WriteLine(y);
+                }
+            }
+            
+        }
+
+        #region FIR Filter Test
+
+        const int FIR_ORDER = 64;
+        Queue<double> fir_data = new Queue<double>(FIR_ORDER);
+        List<double> fir_coeff = new List<double>(FIR_ORDER);
+
+        private void FIRCreateCoeff()
+        {
+            for (int i = 0; i < FIR_ORDER; i++)
+            {
+                fir_coeff.Add(1.0 / (double)FIR_ORDER);
+                fir_data.Enqueue(0.0);
+            }
+        }
+
+        private double Smooth(double Power)
+        {
+            fir_data.Enqueue(Power);
+            if (fir_data.Count > FIR_ORDER)
+                fir_data.Dequeue();
+
+            var x = fir_data.ToArray();
+            var h = fir_coeff.ToArray();
+
+            double y = 0.0;
+
+            for (int i = 0; i < FIR_ORDER; i++)
+            {
+                y += h[i] * x[FIR_ORDER - i - 1];
+            }
+
+            return y;
+        }
+
+        private List<double> FIRFilter(List<double> b, List<double> x)
+        {
+            //y[n]=b0x[n]+b1x[n-1]+....bmx[n-M]
+
+            var y = new List<double>();
+
+            int M = b.Count;
+            int n = x.Count;
+
+            double t = 0.0;
+
+            for (int j = 0; j < n; j++)
+            {
+                for (int i = 0; i < M; i++)
+                {
+                    t += b[i] * x[n - i - 1];
+                }
+                y.Add(t);
+            }
+
+            return y;
+        }
+
+        #endregion
     }
 }

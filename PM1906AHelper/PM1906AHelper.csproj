@@ -47,6 +47,7 @@
     <Compile Include="Calibration\CalibrationHelper.cs" />
     <Compile Include="Calibration\FuncPerRange.cs" />
     <Compile Include="Calibration\FuncPerWav.cs" />
+    <Compile Include="Core\FirFilter.cs" />
     <Compile Include="Core\GlobalDef.cs" />
     <Compile Include="Core\NotifiableClassBase.cs" />
     <Compile Include="Core\Property.cs" />
