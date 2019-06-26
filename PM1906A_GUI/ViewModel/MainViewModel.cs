@@ -307,7 +307,7 @@ namespace PM1906A_GUI.ViewModel
                     }
                     finally
                     {
-                        Thread.Sleep(50);
+                        Thread.Sleep(2);
                     }
 
                 }
