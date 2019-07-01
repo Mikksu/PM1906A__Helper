@@ -5,6 +5,7 @@ using PM1906AHelper.Core;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace PM1906AHelper.Tests
 {
@@ -110,23 +111,42 @@ namespace PM1906AHelper.Tests
         [TestMethod]
         public void FIR_Filter_Test()
         {
-            double y;
+
+            //Stopwatch sw = new Stopwatch();
+
+            //sw.Start();
 
             FIRCreateCoeff();
 
             var filename = DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
 
-            Random r = new Random();
+            // Random r = new Random();
 
-            using(StreamWriter wr = File.CreateText(filename))
+            using (PM1906A pm = new PM1906A(PortName, BaudRate))
             {
-                while (true)
-                {
-                    y = Smooth(r.NextDouble() * 10);
+                pm.Open();
 
-                    wr.WriteLine(y);
+                var idn = pm.IDN();
+
+                pm.SetUnit(UnitEnum.V);
+
+                using (StreamWriter wr = File.CreateText(filename))
+                {
+                    while (true)
+                    {
+                        pm.Read(out double power, out UnitEnum unit);
+                        wr.WriteLine(power);
+                        // wr.WriteLine($"{sw.ElapsedTicks},{power}");
+
+                        //Thread.Sleep(1);
+                    }
                 }
+
+                
+
             }
+
+            
             
         }
 

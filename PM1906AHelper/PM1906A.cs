@@ -20,10 +20,12 @@ namespace PM1906AHelper
 
         public PM1906A(string PortName, int BaudRate)
         {
-            port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One);
-            port.ReadTimeout = 2000;
+            port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One)
+            {
+                ReadTimeout = 2000
+            };
 
-            fir_filter = new FirFilter(10);
+            fir_filter = new FirFilter(1);
         }
 
         #endregion
