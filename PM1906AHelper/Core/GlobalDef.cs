@@ -25,4 +25,10 @@
         WL_1490 = 1490,
         WL_1550 = 1550
     }
+
+    public enum TriggerStatusEnum
+    {
+        IDLE,
+        BUSY
+    }
 }
