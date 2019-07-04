@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace PM1906AHelper
 {
@@ -26,6 +25,15 @@ namespace PM1906AHelper
         }
 
         /// <summary>
+        /// Clean all existed points in the trigger buffer.
+        /// </summary>
+        public void Trigger_CleanBuffer()
+        {
+            _write(CMD_TS_CLR);
+            Thread.Sleep(100);
+        }
+
+        /// <summary>
         /// Get the status of the trigger.
         /// <para><see cref="ArgumentException"/> will be returned if the return string is not IDLE or BUSY.</para>
         /// </summary>
@@ -42,14 +50,6 @@ namespace PM1906AHelper
         }
 
         /// <summary>
-        /// Clean the used trigger buffer.
-        /// </summary>
-        public void Trigger_CleanBuffer()
-        {
-            _write(CMD_TS_CLR);
-        }
-
-        /// <summary>
         /// Get how many optical power are there in the trigger buffer.
         /// </summary>
         /// <returns></returns>
@@ -60,6 +60,32 @@ namespace PM1906AHelper
                 return len;
             else
                 throw new FormatException($"the return value {ret} is incorrect.");
+        }
+
+        /// <summary>
+        /// Read the triggered power in the buffer.
+        /// </summary>
+        /// <returns></returns>
+        public List<double> Trigger_ReadBuffer()
+        {
+            var timeout_bak = port.ReadTimeout;
+            port.ReadTimeout = 10000;
+
+            try
+            {
+                var ret = _query($"{CMD_TS_READ}?");
+                var arr = ret.Split(',').Select(double.Parse).ToList();
+
+                return arr;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                port.ReadTimeout = timeout_bak;
+            }
         }
     }
 }

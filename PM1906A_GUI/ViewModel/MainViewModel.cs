@@ -5,6 +5,8 @@ using PM1906AHelper;
 using PM1906AHelper.Calibration;
 using PM1906AHelper.Core;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
@@ -52,7 +54,7 @@ namespace PM1906A_GUI.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            // generate fake data to debug
+            // generate fake data to make the UI work.
             this.CalibrationHelper = new CalibrationHelper();
             this.CalibrationHelper.ADBackgroundNoise = 12.5;
             this.CalibrationHelper.Res = new double[] { 14567897986.1 };
@@ -73,6 +75,7 @@ namespace PM1906A_GUI.ViewModel
                     }
                 }
             };
+
         }
 
         #region Properties
@@ -248,6 +251,8 @@ namespace PM1906A_GUI.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public Point[] ScannedPoints { get; private set; }
 
         #endregion
 
@@ -575,6 +580,108 @@ namespace PM1906A_GUI.ViewModel
                     catch (Exception ex)
                     {
 
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand TriggerStartCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        lock (pmLocker)
+                        {
+                            pm.Trigger_CleanBuffer();
+
+                            pm.Trigger_Start();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand TriggerStopCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        lock (pmLocker)
+                        {
+                            pm.Trigger_Stop();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand TriggerGetLength
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        lock (pmLocker)
+                        {
+                            var len = pm.Trigger_GetUsedBuffLen();
+                            MessageBox.Show($"There are {len} points in the buffer.", "Get Length", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand TriggerReadBuffer
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+                    try
+                    {
+                        List<Point> tmpList = new List<Point>();
+
+                        await Task.Run(() =>
+                        {
+                            lock (pmLocker)
+                            {
+                                var points = pm.Trigger_ReadBuffer();
+
+                                for (int i = 0; i < points.Count; i++)
+                                {
+                                    tmpList.Add(new Point(i, points[i]));
+                                }
+                            }
+                        });
+
+                        ScannedPoints = tmpList.ToArray();
+
+                        // update the UI
+                        RaisePropertyChanged("ScannedPoints");
+                    }
+                    catch (Exception ex)
+                    {
                         MessageBox.Show(ex.Message);
                     }
                 });

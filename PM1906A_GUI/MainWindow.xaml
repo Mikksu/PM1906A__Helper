@@ -12,6 +12,7 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
         xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+        xmlns:dxchart="http://schemas.devexpress.com/winfx/2008/xaml/charts"
         x:Class="PM1906A_GUI.MainWindow"
         mc:Ignorable="d"
         Title="PM1906A Control Panel" Height="600" Width="600" WindowStartupLocation="CenterScreen">
@@ -43,7 +44,7 @@
 
             <!-- Power Display -->
             <TextBox Grid.Row="1" Text="{Binding Main.CurrentPowerFormatted, Mode=OneWay}" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="48" IsReadOnly="True" MaxLines="1" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" FontFamily="Arial Rounded MT Bold" FontWeight="ExtraBold"/>
-            
+
             <!-- Wavelength display -->
             <Border Grid.Row="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Padding="2" Background="#22000000">
                 <TextBlock Text="{Binding Main.CurrentWavelength, StringFormat=\{0\} nm}" Foreground="White"/>
@@ -87,6 +88,8 @@
 
         <!-- Control Panel -->
         <TabControl Grid.Row="2" TabStripPlacement="Bottom" Background="{x:Null}" BorderBrush="{x:Null}">
+
+            <!-- Manual Operation Tab -->
             <TabItem Header="Manual" Background="{x:Null}" BorderBrush="{x:Null}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -156,6 +159,57 @@
 
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Trigger Source" Background="{x:Null}" BorderBrush="{x:Null}">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="10"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Content="Start" Command="{Binding Main.TriggerStartCommand}" />
+                        <Button Grid.Column="1" Content="Stop" Command="{Binding Main.TriggerStopCommand}"/>
+                        <Button Grid.Column="2" Content="Get Len" Command="{Binding Main.TriggerGetLength}"/>
+                        <Button Grid.Column="3" Content="Read Buff" Command="{Binding Main.TriggerReadBuffer}"/>
+                    </Grid>
+                    <dxchart:ChartControl Grid.Row="1"  DataSource="{Binding Main.ScannedPoints}" >
+                        <dxchart:ChartControl.Titles>
+                            <dxchart:Title Content="PDL" Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        </dxchart:ChartControl.Titles>
+                        <dxchart:XYDiagram2D>
+                            <dxchart:XYDiagram2D.AxisY>
+                                <dxchart:AxisY2D>
+                                    <dxchart:AxisY2D.Title>
+                                        <dxchart:AxisTitle Content="Optical Power"/>
+                                    </dxchart:AxisY2D.Title>
+                                </dxchart:AxisY2D>
+                            </dxchart:XYDiagram2D.AxisY>
+                            <dxchart:XYDiagram2D.AxisX>
+                                <dxchart:AxisX2D>
+                                    <dxchart:AxisX2D.Title>
+                                        <dxchart:AxisTitle Content="Index"/>
+                                    </dxchart:AxisX2D.Title>
+                                </dxchart:AxisX2D>
+                            </dxchart:XYDiagram2D.AxisX>
+                            <dxchart:LineSeries2D DisplayName="PDL" ArgumentDataMember="X" ValueDataMember="Y">
+                            </dxchart:LineSeries2D>
+                        </dxchart:XYDiagram2D>
+                    </dxchart:ChartControl>
+                </Grid>
+            </TabItem>
+
+            <!-- Calibration Tab -->
             <TabItem Header="Calibration" BorderBrush="{x:Null}" Background="{x:Null}">
                 <Grid>
                     <Grid.RowDefinitions>

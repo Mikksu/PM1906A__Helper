@@ -56,7 +56,7 @@
     <Compile Include="PM1906A_CommandCalibration.cs" />
     <Compile Include="PM1906A_CommandDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PM1906A_Trigger.cs" />
+    <Compile Include="PM1906A_TriggerSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

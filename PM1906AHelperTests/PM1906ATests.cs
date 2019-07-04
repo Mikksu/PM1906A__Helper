@@ -16,6 +16,31 @@ namespace PM1906AHelper.Tests
         private int BaudRate = 921600;
 
         [TestMethod()]
+        public void TriggerTest()
+        {
+            using (PM1906A pm = new PM1906A(PortName, BaudRate))
+            {
+                pm.Open();
+
+                var idn = pm.IDN();
+
+                Debug.WriteLine(idn);
+
+                pm.Trigger_Start();
+
+                Thread.Sleep(4000);
+
+                pm.Trigger_Stop();
+
+                var len = pm.Trigger_GetUsedBuffLen();
+
+                Debug.WriteLine($"There are {len} points in the trigger buffer.");
+
+                var powers = pm.Trigger_ReadBuffer();
+            }
+        }
+
+        [TestMethod()]
         public void ReadTest()
         {
             using (PM1906A pm = new PM1906A(PortName, BaudRate))
