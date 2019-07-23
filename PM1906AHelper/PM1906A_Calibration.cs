@@ -1,9 +1,15 @@
 ﻿using PM1906AHelper.Core;
+using System;
 
 namespace PM1906AHelper
 {
     public partial class PM1906A
     {
+        /// <summary>
+        /// Get the maximum order of the FIR filter supported by the firmware.
+        /// </summary>
+        public const int MAX_FIR_ORDER = 256;
+
         /// <summary>
         /// Reset the calibration parameters to the default values.
         /// </summary>
@@ -40,14 +46,57 @@ namespace PM1906AHelper
             _write($"{CMD_CAL_ADBN} {BN_mV}"); 
         }
 
+        /// <summary>
+        /// Set the value of the sampling resistors.
+        /// </summary>
+        /// <param name="Range"></param>
+        /// <param name="Res"></param>
         public void SetSamplingResistance(RangeEnum Range, double Res)
         {
             _write($"{CMD_CAL_RES} {(int)Range},{Res}");
         }
 
+        /// <summary>
+        /// Set the equation to convert the ADC value to optical power.
+        /// </summary>
+        /// <param name="Wavelen"></param>
+        /// <param name="Range"></param>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <param name="DarkCurrent"></param>
         public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C, double DarkCurrent)
         {
             _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C},{DarkCurrent}");
+        }
+
+        /// <summary>
+        /// Set the order of the FIR filter.
+        /// </summary>
+        /// <param name="Order"> should be 1 - <see cref="MAX_FIR_ORDER"/></param>
+        public void SetFIROrder(int Order)
+        {
+            if (Order > MAX_FIR_ORDER || Order < 1)
+                throw new ArgumentOutOfRangeException($"the order should be 1 - {MAX_FIR_ORDER}.");
+            else
+            {
+                _write($"{CMD_CAL_FIR_ORDER} {Order}");
+            }
+        }
+
+        /// <summary>
+        /// Set the coefficient locates in the specific position.
+        /// </summary>
+        /// <param name="Index">should be 0 - <see cref="MAX_FIR_ORDER"/></param>
+        /// <param name="Value"></param>
+        public void SetFIRCoefficient(int Index, double Value)
+        {
+            if(Index > MAX_FIR_ORDER || Index < 0)
+                throw new ArgumentOutOfRangeException($"the index should be 1 - {MAX_FIR_ORDER}.");
+            else
+            {
+                _write($"{CMD_CAL_FIR_COEFF} {Index},{Value}");
+            }
         }
     }
 }

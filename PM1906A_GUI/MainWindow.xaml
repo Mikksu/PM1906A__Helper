@@ -217,8 +217,9 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <dxprg:PropertyGridControl
+                        AllowExpanding="Default"
                         HeaderColumnWidth="200"
-                        ShowProperties="WithPropertyDefinitions"
+                        ShowProperties="All"
                         ExpandCategoriesWhenSelectedObjectChanged="True"
                         SelectedObject="{Binding Main.CalibrationHelper}"
                         Margin="0,0,0,10">
@@ -251,6 +252,7 @@
                                     <dxprg:PropertyDefinition Path="*.DC" />
                                 </dxprg:CollectionDefinition>
                             </dxprg:CollectionDefinition>
+                            <dxprg:PropertyDefinition Path="FIR" ShowMenuButton="False"/>
                         </dxprg:PropertyGridControl.PropertyDefinitions>
 
                     </dxprg:PropertyGridControl>
@@ -260,11 +262,12 @@
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Grid.Resources>
                             <Style TargetType="Button">
@@ -273,17 +276,19 @@
                         </Grid.Resources>
                         <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}"/>
                         <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}"/>
-                        <Button Content="Default" Grid.Column="2" Command="{Binding Main.SetToDefault}"/>
-                        <Button Content="Reload" Grid.Column="4" 
+                        <Button Content="FIR Co." Grid.Column="2" Command="{Binding Main.LoadFIRCoefficientCommand}"/>
+                        <Button Content="Default" Grid.Column="3" Command="{Binding Main.LoadDefaultSettingsCommand}"/>
+                        
+                        <Button Content="Reload" Grid.Column="5" 
                                 Command="{Binding Main.ReloadCalParamsCommand}"
                                 ToolTip="Reload the calibration settings from the device"/>
-                        <Button Content="Send" Grid.Column="5"
-                                Command="{Binding Main.SetCalParamsCommand}"
+                        <Button Content="Send" Grid.Column="6"
+                                Command="{Binding Main.SendCalParamsCommand}"
                                 CommandParameter="{Binding Main.CalibrationHelper}"
                                 ToolTip="Set all the calibration settings to the device"/>
-                        <Button Content="Write to Flash" Grid.Column="7" Background="Red" 
+                        <Button Content="Flash" Grid.Column="8" 
                                 ToolTip="Save the calibration settings to the flash"
-                                Command="{Binding Main.SaveCalParamToFlashCommand}"/>
+                                Command="{Binding Main.SaveCalParamToFlashCommand}" Foreground="Red" FontWeight="Bold" FontSize="16"/>
 
                     </Grid>
                 </Grid>
