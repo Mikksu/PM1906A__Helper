@@ -217,7 +217,6 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <dxprg:PropertyGridControl
-                        AllowExpanding="Default"
                         HeaderColumnWidth="200"
                         ShowProperties="All"
                         ExpandCategoriesWhenSelectedObjectChanged="True"
@@ -235,6 +234,9 @@
                         <dxprg:PropertyGridControl.PropertyDefinitions>
                             <dxprg:PropertyDefinition Path="ADBackgroundNoise" ShowMenuButton="False"/>
                             <dxprg:CollectionDefinition Path="Res" Type="{x:Type sys:Double[]}">
+                                <dxprg:CollectionDefinition.CellTemplate>
+                                    <DataTemplate/>
+                                </dxprg:CollectionDefinition.CellTemplate>
                                 <dxprg:CollectionDefinition.MenuCustomizations>
                                     <dxb:RemoveAction ElementName="{x:Static dxprg:BarItemNames.Refresh}" />
                                     <dxb:RemoveAction ElementName="{x:Static dxprg:BarItemNames.Reset}" />
@@ -243,6 +245,9 @@
                                 <dxprg:PropertyDefinition Path="*." />
                             </dxprg:CollectionDefinition>
                             <dxprg:CollectionDefinition Path="FuncsPerWavelength" Type="{x:Type PM1906AHelperCal:FuncPerWav[]}">
+                                <dxprg:CollectionDefinition.CellTemplate>
+                                    <DataTemplate/>
+                                </dxprg:CollectionDefinition.CellTemplate>
                                 <dxprg:PropertyDefinition Path="*.Wavelength" />
                                 <dxprg:CollectionDefinition Path="*.Funcs" Type="{x:Type PM1906AHelperCal:FuncPerRange[]}">
                                     <dxprg:PropertyDefinition Path="*.Range" />
@@ -252,9 +257,14 @@
                                     <dxprg:PropertyDefinition Path="*.DC" />
                                 </dxprg:CollectionDefinition>
                             </dxprg:CollectionDefinition>
-                            <dxprg:PropertyDefinition Path="FIR" ShowMenuButton="False"/>
-                        </dxprg:PropertyGridControl.PropertyDefinitions>
 
+                            <dxprg:PropertyDefinition Path="FIR" AllowExpanding="Default">
+                                <dxprg:PropertyDefinition.CellTemplate>
+                                    <DataTemplate/>
+                                </dxprg:PropertyDefinition.CellTemplate>
+                            </dxprg:PropertyDefinition>
+
+                        </dxprg:PropertyGridControl.PropertyDefinitions>
                     </dxprg:PropertyGridControl>
 
                     <Grid Grid.Row="1" Grid.Column="1">

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace PM1906AHelper.Core
 {
-    public class NotifiableClassBase : INotifyPropertyChanged
+    public class NotifiableClassBase : ExpandableObjectConverter, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

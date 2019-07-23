@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PM1906AHelper.Calibration
 {
-    public class FIRFilter: NotifiableClassBase
+    public class FIRFilter:  NotifiableClassBase
     {
         #region Constructors
 
