@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calibration\CalibrationHelper.cs" />
+    <Compile Include="Calibration\FIRFilter.cs" />
     <Compile Include="Calibration\FuncPerRange.cs" />
     <Compile Include="Calibration\FuncPerWav.cs" />
     <Compile Include="Core\FirFilter.cs" />

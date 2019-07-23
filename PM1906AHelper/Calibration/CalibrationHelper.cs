@@ -18,6 +18,7 @@ namespace PM1906AHelper.Calibration
             Properties.Add(new Property() { Name = "PDDarkCurrent" });
             Properties.Add(new Property() { CollectionName = "Res" });
             Properties.Add(new Property() { CollectionName = "FuncsPerWavelength" });
+            Properties.Add(new Property() { Name = "FIR" });
         }
 
         #endregion Constructors
@@ -39,6 +40,12 @@ namespace PM1906AHelper.Calibration
         [Category("Advanced")]
         [DisplayName("Functions")]
         public FuncPerWav[] FuncsPerWavelength { get; set; }
+
+        [Category("Filter")]   
+        [DisplayName("FIR")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public FIRFilter FIR { get; set; }
+
 
         [JsonIgnore]
         [Browsable(false)]

@@ -75,6 +75,12 @@ namespace PM1906A_GUI.ViewModel
                     }
                 }
             };
+            this.CalibrationHelper.FIR = new FIRFilter()
+            {
+                Order = 128,
+                Fs = 2000,
+                Coefficient = new double[] { 0.123, 0.321 }
+            };
 
         }
 
@@ -446,7 +452,7 @@ namespace PM1906A_GUI.ViewModel
             }
         }
 
-        public RelayCommand<CalibrationHelper> SetCalParamsCommand
+        public RelayCommand<CalibrationHelper> SendCalParamsCommand
         {
             get
             {
@@ -456,14 +462,14 @@ namespace PM1906A_GUI.ViewModel
                     {
                         lock(pmLocker)
                         {
-                            // write AD back-noise
+                            // send AD back-noise
                             pm.SetADCBackgroundNoise(param.ADBackgroundNoise);
-                            
-                            // write Resistors
+
+                            // send Resistors
                             foreach (RangeEnum range in Enum.GetValues(typeof(RangeEnum)))
                                 pm.SetSamplingResistance(range, param.Res[(int)range]);
 
-                            // write functions
+                            // send calibration equations.
                             foreach (var fpwave in param.FuncsPerWavelength)
                             {
                                 var wav = (WavelengthEnum)fpwave.Wavelength;
@@ -471,6 +477,13 @@ namespace PM1906A_GUI.ViewModel
                                 {
                                     pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C, fun.DC);
                                 }
+                            }
+
+                            // send FIR parameters
+                            pm.SetFIROrder(param.FIR.Order);
+                            for (int i = 0; i < param.FIR.Coefficient.Length; i++)
+                            {
+                                pm.SetFIRCoefficient(i, param.FIR.Coefficient[i]);
                             }
                         }
                     }
@@ -503,7 +516,7 @@ namespace PM1906A_GUI.ViewModel
             }
         }
 
-        public RelayCommand SetToDefault
+        public RelayCommand LoadDefaultSettingsCommand
         {
             get
             {
@@ -518,6 +531,63 @@ namespace PM1906A_GUI.ViewModel
                     }
                     catch (Exception ex)
                     {
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public RelayCommand LoadFIRCoefficientCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    try
+                    {
+                        OpenFileDialog dlg = new OpenFileDialog();
+                        dlg.Filter = "csv|*.csv";
+                        dlg.Multiselect = false;
+                        var ret = dlg.ShowDialog();
+                        if (ret.HasValue && ret.Value)
+                        {
+                            try
+                            {
+                                var str = File.ReadAllLines(dlg.FileName);
+                                List<double> coeff = new List<double>();
+                                for(int i = 0; i < str.Length; i++)
+                                {
+                                    if (double.TryParse(str[i], out double value))
+                                        coeff.Add(value);
+                                    else
+                                    {
+                                        MessageBox.Show($"Unable to convert line {i} to double.","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                }
+
+                                if (coeff.Count > CalibrationHelper.FIR.Coefficient.Length)
+                                    MessageBox.Show($"There are too many values in the coefficient list.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                else
+                                {
+                                    // clean the previous coefficients.
+                                    CalibrationHelper.FIR.ZeroCoefficient();
+
+                                    for (int i = 0; i < coeff.Count; i++)
+                                    {
+                                        CalibrationHelper.FIR.Coefficient[i] = coeff[i];
+                                        CalibrationHelper.FIR.Flush();
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show($"Unrecognized json file opened.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
                         MessageBox.Show(ex.Message);
                     }
                 });
