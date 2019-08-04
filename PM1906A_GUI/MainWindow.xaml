@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:PM1906A_GUI"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:pgview ="clr-namespace:PM1906A_GUI.PGView"
         xmlns:PM1906AHelperCore="clr-namespace:PM1906AHelper.Core;assembly=PM1906AHelper"
         xmlns:PM1906AHelperCal="clr-namespace:PM1906AHelper.Calibration;assembly=PM1906AHelper"
@@ -73,11 +74,11 @@
                 </Grid.Resources>
                 <TextBlock Text="dBm" 
                            Opacity="{Binding Main.CurrentUnit, ConverterParameter=dBm, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="W" Grid.Row="1" 
+                <TextBlock Text="mW" Grid.Row="1" 
                            Opacity="{Binding Main.CurrentUnit, ConverterParameter=W, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="A" Grid.Row="2" 
+                <TextBlock Text="mA" Grid.Row="2" 
                            Opacity="{Binding Main.CurrentUnit, ConverterParameter=A, Converter={StaticResource opacityConverter}}"/>
-                <TextBlock Text="V" Grid.Row="3" 
+                <TextBlock Text="mV" Grid.Row="3" 
                            Opacity="{Binding Main.CurrentUnit, ConverterParameter=V, Converter={StaticResource opacityConverter}}"/>
             </Grid>
 
@@ -112,7 +113,13 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="COM" VerticalAlignment="Center" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                            <ComboBox VerticalAlignment="Center" ItemsSource="{Binding Main.PortNameList}" SelectedItem="{Binding Main.PortName, Delay=10}" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}}" Grid.Column="1"/>
+                            <ComboBox VerticalAlignment="Center" ItemsSource="{Binding Main.PortNameList}" SelectedItem="{Binding Main.PortName, Delay=10}" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}}" Grid.Column="1">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownOpened">
+                                        <i:InvokeCommandAction Command="{Binding Main.RefreshPortCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
                             <TextBlock Text="BaudRate" VerticalAlignment="Center" Margin="10,0,5,0" Grid.Column="2" HorizontalAlignment="Right"/>
                             <TextBox Text="{Binding Main.BaudRate}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLines="1" MaxLength="7" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}, Source={StaticResource Locator}}" Grid.Column="3"/>
                             <Button Content="Open" Margin="5,0,0,0" VerticalAlignment="Center" Command="{Binding Main.OpenPMCommand}" IsEnabled="{Binding Main.IsOpened, Converter={StaticResource ConvertReverseBoolean}, Source={StaticResource Locator}}" Grid.Column="4"/>
@@ -133,16 +140,16 @@
 
                     <Grid Grid.Row="2" Margin="0,5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="230"/>
                             <ColumnDefinition Width="2"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="UNIT" >
                             <ListBox SelectedValue="{Binding Main.CurrentUnit, Delay=20}" SelectedValuePath="Tag" Style="{StaticResource HorizontalRadioButtonList}">
                                 <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.dBm}" Content="dBm"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.W}" Content="W"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.A}" Content="A"/>
-                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.V}" Content="V"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.W}" Content="mW"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.A}" Content="mA"/>
+                                <ListBoxItem Tag="{x:Static PM1906AHelperCore:UnitEnum.V}" Content="mV"/>
                             </ListBox>
                         </GroupBox>
                         <GroupBox Header="Wavelength" Grid.Column="2" Padding="5" >

@@ -269,7 +269,10 @@ namespace PM1906A_GUI.ViewModel
             this.CurrentPower = result.Power;
         }
 
-        private void ReadInitStatus()
+        /// <summary>
+        /// Sync the current status of the powermeter after the application started.
+        /// </summary>
+        private void SyncStatus()
         {
             pm.GetRange(out RangeEnum range);
             this.CurrentRange = range;
@@ -329,6 +332,20 @@ namespace PM1906A_GUI.ViewModel
 
         #region Commands
 
+        /// <summary>
+        /// Refresh the serial port list.
+        /// </summary>
+        public RelayCommand RefreshPortCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    RaisePropertyChanged("PortNameList");
+                });
+            }
+        }
+
         public RelayCommand OpenPMCommand
         {
             get
@@ -353,7 +370,7 @@ namespace PM1906A_GUI.ViewModel
 
                         pm.Open();
 
-                        ReadInitStatus();
+                        SyncStatus();
 
                         this.IsOpened = true;
 

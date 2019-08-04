@@ -193,13 +193,13 @@ namespace PM1906AHelper
             switch (Unit)
             {
                 case UnitEnum.dBm:
-                    Formatted = Power.ToString("F3");
+                    Formatted = Power.ToString("F2");
                     break;
 
                 case UnitEnum.W:
                 case UnitEnum.A:
                 case UnitEnum.V:
-                    var tmp = Power.ToString("F10");
+                    var tmp = (Power * 1000).ToString("F10");
                     Formatted = tmp.Remove(tmp.Length - 1 - (int)Range);
                     break;
             }
