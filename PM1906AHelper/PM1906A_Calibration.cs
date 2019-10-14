@@ -36,16 +36,7 @@ namespace PM1906AHelper
         {
             _write(CMD_CAL_SAV);
         }
-
-        /// <summary>
-        /// Set the background noise of the inner ADC.
-        /// </summary>
-        /// <param name="BN_mV">Background Noise in mV.</param>
-        public void SetADCBackgroundNoise(double BN_mV)
-        {
-            _write($"{CMD_CAL_ADBN} {BN_mV}"); 
-        }
-
+        
         /// <summary>
         /// Set the value of the sampling resistors.
         /// </summary>
@@ -65,9 +56,9 @@ namespace PM1906AHelper
         /// <param name="B"></param>
         /// <param name="C"></param>
         /// <param name="DarkCurrent"></param>
-        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C, double DarkCurrent)
+        public void SetFunc(WavelengthEnum Wavelen, RangeEnum Range, double A, double B, double C)
         {
-            _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C},{DarkCurrent}");
+            _write($"{CMD_CAL_FUNC} {(int)Wavelen},{(int)Range},{A},{B},{C}");
         }
 
         /// <summary>
@@ -97,6 +88,14 @@ namespace PM1906AHelper
             {
                 _write($"{CMD_CAL_FIR_COEFF} {Index},{Value}");
             }
+        }
+        
+        /// <summary>
+        /// Run the process to test the dark-current automatically.
+        /// </summary>
+        public void TestDarkCurrent()
+        {
+            _write($"{CMD_DC_TST_AUTO}");
         }
     }
 }

@@ -27,18 +27,18 @@ namespace PM1906AHelper.Calibration
         [Browsable(false)]
         [JsonIgnore]
         public ObservableCollection<Property> Properties { get; set; }
-
-        [Category("Basic")]
-        [DisplayName("AD Background Noise(V)")]
-        public double ADBackgroundNoise { get; set; }
-
+        
         [Category("Basic")]
         [DisplayName("Rsistance(ohm)")]
         public double[] Res { get; set; }
 
+        [Category("Basic")]
+        [DisplayName("Dark Current(uA)")]
+        public double[] DarkCurrent { get; set; }
+
         [Category("Advanced")]
         [DisplayName("Equations")]
-        public FuncPerWav[] FuncsPerWavelength { get; set; }
+        public FuncPerWav[] WL { get; set; }
 
         [Category("Filter")]
         [DisplayName("FIR")]

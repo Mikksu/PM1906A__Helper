@@ -8,7 +8,6 @@ namespace PM1906AHelper.Calibration
         private double _a;
         private double _b;
         private double _c;
-        private double _darkcurrent;
 
         [ReadOnly(true)]
         [Browsable(false)]
@@ -49,20 +48,6 @@ namespace PM1906AHelper.Calibration
                 UpdateProperty(ref _c, value);
             }
         }
-
-        [DisplayName("Dark Current(A)")]
-        public double DC
-        {
-            get
-            {
-                return _darkcurrent;
-            }
-            set
-            {
-                UpdateProperty(ref _darkcurrent, value);
-            }
-        }
-
         
         public override string ToString()
         {

@@ -56,9 +56,9 @@ namespace PM1906A_GUI.ViewModel
         {
             // generate fake data to make the UI work.
             this.CalibrationHelper = new CalibrationHelper();
-            this.CalibrationHelper.ADBackgroundNoise = 12.5;
             this.CalibrationHelper.Res = new double[] { 14567897986.1 };
-            this.CalibrationHelper.FuncsPerWavelength = new FuncPerWav[]
+            this.CalibrationHelper.DarkCurrent = new double[] { 0.123 };
+            this.CalibrationHelper.WL = new FuncPerWav[]
             {
                 new FuncPerWav()
                 {
@@ -479,20 +479,17 @@ namespace PM1906A_GUI.ViewModel
                     {
                         lock(pmLocker)
                         {
-                            // send AD back-noise
-                            pm.SetADCBackgroundNoise(param.ADBackgroundNoise);
-
                             // send Resistors
                             foreach (RangeEnum range in Enum.GetValues(typeof(RangeEnum)))
                                 pm.SetSamplingResistance(range, param.Res[(int)range]);
 
                             // send calibration equations.
-                            foreach (var fpwave in param.FuncsPerWavelength)
+                            foreach (var fpwave in param.WL)
                             {
                                 var wav = (WavelengthEnum)fpwave.Wavelength;
                                 foreach (var fun in fpwave.Funcs)
                                 {
-                                    pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C, fun.DC);
+                                    pm.SetFunc(wav, (RangeEnum)(fun.Range - 1), fun.A, fun.B, fun.C);
                                 }
                             }
 

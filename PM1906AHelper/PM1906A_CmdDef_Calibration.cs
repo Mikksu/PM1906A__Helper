@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PM1906AHelper
+﻿namespace PM1906AHelper
 {
     public partial class PM1906A
     {
@@ -12,13 +6,13 @@ namespace PM1906AHelper
         /// Set the order of the FIR filter.
         /// <para>Order:1 - 256</para>
         /// </summary>
-        private string CMD_CAL_FIR_ORDER = "_CAL_FIR_ORDER";
+        private string CMD_CAL_FIR_ORDER = "__CAL_FIR_ORDER";
 
         /// <summary>
         /// Set the coefficient of the FIR filter.
         /// <para>[index],[value]</para>
         /// </summary>
-        private string CMD_CAL_FIR_COEFF = "_CAL_FIR_COEFF";
+        private string CMD_CAL_FIR_COEFF = "__CAL_FIR_COEFF";
 
         /// <summary>
         /// Read the calibration param from the device.
@@ -45,10 +39,9 @@ namespace PM1906AHelper
         /// </summary>
         private string CMD_CAL_FUNC = "__CAL_FUNC";
 
-
         /// <summary>
-        /// Set the background noise of the ADC in mV.
+        /// Test the dark current automatically.
         /// </summary>
-        private string CMD_CAL_ADBN = "__CAL_ADBN";
+        private string CMD_DC_TST_AUTO = "__CAL_DC_TST";
     }
 }
