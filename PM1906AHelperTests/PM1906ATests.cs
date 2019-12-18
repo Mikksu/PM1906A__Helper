@@ -12,7 +12,7 @@ namespace PM1906AHelper.Tests
     [TestClass()]
     public class PM1906ATests
     {
-        private string PortName = "COM13";
+        private string PortName = "COM7";
         private int BaudRate = 921600;
 
         [TestMethod()]

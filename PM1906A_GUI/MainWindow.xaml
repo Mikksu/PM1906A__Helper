@@ -97,6 +97,7 @@
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="80"/>
+                        <RowDefinition Height="80"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
@@ -163,6 +164,10 @@
                             </Grid>
                         </GroupBox>
                     </Grid>
+
+                    <GroupBox Header="Device Info." Grid.Row="3">
+                        <TextBlock Text="{Binding Main.IDN}"/>
+                    </GroupBox>
 
                 </Grid>
             </TabItem>
@@ -280,26 +285,27 @@
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <Grid.Resources>
                             <Style TargetType="Button">
                                 <Setter Property="Margin" Value="2"/>
                             </Style>
                         </Grid.Resources>
-                        <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}"/>
-                        <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}"/>
-                        <Button Content="FIR Co." Grid.Column="2" Command="{Binding Main.LoadFIRCoefficientCommand}"/>
-                        <Button Content="Default" Grid.Column="3" Command="{Binding Main.LoadDefaultSettingsCommand}"/>
+                        <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}" ToolTip="Import calibration parameters from the file."/>
+                        <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}" ToolTip="Export calibration parameters to the file."/>
+                        <Button Content="FIR Co." Grid.Column="2" Command="{Binding Main.LoadFIRCoefficientCommand}" ToolTip="Import the FIR paramters from the file and set them to the device."/>
+                        <Button Content="Default" Grid.Column="3" Command="{Binding Main.LoadDefaultSettingsCommand}" ToolTip="Set the calibration parameters to the default value."/>
+                        <Button Content="DC Test" Grid.Column="4" Command="{Binding Main.AutoTestDarkCurrentCommand}" ToolTip="Auto-test the dark-current."/>
                         
-                        <Button Content="Reload" Grid.Column="5" 
+                        <Button Content="Reload" Grid.Column="6" 
                                 Command="{Binding Main.ReloadCalParamsCommand}"
                                 ToolTip="Reload the calibration settings from the device"/>
-                        <Button Content="Send" Grid.Column="6"
+                        <Button Content="Send" Grid.Column="7"
                                 Command="{Binding Main.SendCalParamsCommand}"
                                 CommandParameter="{Binding Main.CalibrationHelper}"
                                 ToolTip="Set all the calibration settings to the device"/>

@@ -46,6 +46,7 @@ namespace PM1906A_GUI.ViewModel
         private UnitEnum _current_unit = UnitEnum.dBm;
         private CalibrationHelper _cal_helper;
         private string _current_power_formatted = "";
+        private string _idn = "";
 
         #endregion
 
@@ -133,6 +134,19 @@ namespace PM1906A_GUI.ViewModel
             }
         }
        
+        public string IDN
+        {
+            get
+            {
+                return _idn;
+            }
+            set
+            {
+                _idn = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public double CurrentPower
         {
             get
@@ -274,6 +288,10 @@ namespace PM1906A_GUI.ViewModel
         /// </summary>
         private void SyncStatus()
         {
+            // read description
+            var idn = pm.IDN();
+            this.IDN = idn;
+
             pm.GetRange(out RangeEnum range);
             this.CurrentRange = range;
 
@@ -360,7 +378,7 @@ namespace PM1906A_GUI.ViewModel
                             {
                                 pm.Close();
                             }
-                            catch
+                            catch(Exception)
                             {
 
                             }
@@ -407,7 +425,7 @@ namespace PM1906A_GUI.ViewModel
                                     pm.Close();
                                 }
                             }
-                            catch
+                            catch(Exception)
                             {
 
                             }
@@ -424,7 +442,21 @@ namespace PM1906A_GUI.ViewModel
 
                         cts.Cancel();
 
+                        this.IDN = "";
                     }
+                });
+            }
+        }
+
+        public RelayCommand AutoTestDarkCurrentCommand
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    pm.TestDarkCurrent();
+                    Thread.Sleep(2000);
+                    ReloadCalParamsCommand.Execute(null);
                 });
             }
         }
