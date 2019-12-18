@@ -15,7 +15,7 @@
         xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
         xmlns:dxchart="http://schemas.devexpress.com/winfx/2008/xaml/charts"
         x:Class="PM1906A_GUI.MainWindow"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="pm1906a_gui.ico"
         Title="PM1906A Control Panel" Height="600" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
