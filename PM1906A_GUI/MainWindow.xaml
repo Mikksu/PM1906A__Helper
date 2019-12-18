@@ -223,9 +223,15 @@
 
             <!-- Calibration Tab -->
             <TabItem Header="Calibration" BorderBrush="{x:Null}" Background="{x:Null}">
+                <TabItem.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="2"/>
+                    </Style>
+                </TabItem.Resources>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <dxprg:PropertyGridControl
@@ -279,39 +285,41 @@
                         </dxprg:PropertyGridControl.PropertyDefinitions>
                     </dxprg:PropertyGridControl>
 
-                    <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="70"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="Margin" Value="2"/>
-                            </Style>
-                        </Grid.Resources>
-                        <Button Content="Import" Grid.Column="0" Command="{Binding Main.ImportCalParamsFromJson}" ToolTip="Import calibration parameters from the file."/>
-                        <Button Content="Export" Grid.Column="1" Command="{Binding Main.ExportCalParamsToJsonCommand}" ToolTip="Export calibration parameters to the file."/>
-                        <Button Content="FIR Co." Grid.Column="2" Command="{Binding Main.LoadFIRCoefficientCommand}" ToolTip="Import the FIR paramters from the file and set them to the device."/>
-                        <Button Content="Default" Grid.Column="3" Command="{Binding Main.LoadDefaultSettingsCommand}" ToolTip="Set the calibration parameters to the default value."/>
-                        <Button Content="DC Test" Grid.Column="4" Command="{Binding Main.AutoTestDarkCurrentCommand}" ToolTip="Auto-test the dark-current."/>
-                        
-                        <Button Content="Reload" Grid.Column="6" 
-                                Command="{Binding Main.ReloadCalParamsCommand}"
-                                ToolTip="Reload the calibration settings from the device"/>
-                        <Button Content="Send" Grid.Column="7"
+                        <Button Content="1. Default" Grid.Column="0" Command="{Binding Main.LoadDefaultSettingsCommand}" ToolTip="Set the calibration parameters to the default value."/>
+                        <Button Content="2. Load Cal." Grid.Column="1" Command="{Binding Main.ImportCalParamsFromJson}" ToolTip="Import calibration parameters from the file."/>
+                        <Button Content="3. Write" Grid.Column="2"
                                 Command="{Binding Main.SendCalParamsCommand}"
                                 CommandParameter="{Binding Main.CalibrationHelper}"
-                                ToolTip="Set all the calibration settings to the device"/>
-                        <Button Content="Flash" Grid.Column="8" 
+                                ToolTip="Write calibration parameters to the device"/>
+                        <Button Content="4. DarkCurrent" Grid.Column="3" Command="{Binding Main.AutoTestDarkCurrentCommand}" ToolTip="Auto-test the dark-current."/>
+
+                        <Button Content="5. Flash" Grid.Column="4" 
                                 ToolTip="Save the calibration settings to the flash"
                                 Command="{Binding Main.SaveCalParamToFlashCommand}" Foreground="Red" FontWeight="Bold" FontSize="16"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Save Cal. To File" Grid.Column="0" Command="{Binding Main.ExportCalParamsToJsonCommand}" ToolTip="Export and save calibration parameters to a file."/>
+                        <Button Content="Write FIR Coeff." Grid.Column="1" Command="{Binding Main.LoadFIRCoefficientCommand}" ToolTip="Load FIR coefficients from file and write to the device."/>
+                        <Button Content="Read Cal. Param" Grid.Column="2" 
+                                Command="{Binding Main.ReloadCalParamsCommand}"
+                                ToolTip="Read calibration parameters from the device"/>
 
                     </Grid>
                 </Grid>

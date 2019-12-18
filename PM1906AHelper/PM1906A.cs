@@ -10,6 +10,8 @@ namespace PM1906AHelper
 
         #region Variables
 
+        const string INVALID_POWER_STRING = "----";
+
         SerialPort port;
 
         FirFilter fir_filter;
@@ -190,18 +192,25 @@ namespace PM1906AHelper
         {
             Formatted = "";
 
-            switch (Unit)
+            if (Double.IsNaN(Power))
             {
-                case UnitEnum.dBm:
-                    Formatted = Power.ToString("F2");
-                    break;
+                Formatted = INVALID_POWER_STRING;
+            }
+            else
+            {
+                switch (Unit)
+                {
+                    case UnitEnum.dBm:
+                        Formatted = Power.ToString("F2");
+                        break;
 
-                case UnitEnum.W:
-                case UnitEnum.A:
-                case UnitEnum.V:
-                    var tmp = (Power * 1000).ToString("F10");
-                    Formatted = tmp.Remove(tmp.Length - 1 - (int)Range);
-                    break;
+                    case UnitEnum.W:
+                    case UnitEnum.A:
+                    case UnitEnum.V:
+                        var tmp = (Power * 1000).ToString("F10");
+                        Formatted = tmp.Remove(tmp.Length - 1 - (int)Range);
+                        break;
+                }
             }
         }
 

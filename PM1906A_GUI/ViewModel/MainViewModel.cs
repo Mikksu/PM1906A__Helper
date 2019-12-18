@@ -45,7 +45,7 @@ namespace PM1906A_GUI.ViewModel
         private RangeEnum _current_range = RangeEnum.RANGE1;
         private UnitEnum _current_unit = UnitEnum.dBm;
         private CalibrationHelper _cal_helper;
-        private string _current_power_formatted = "";
+        private string _current_power_formatted;
         private string _idn = "";
 
         #endregion
