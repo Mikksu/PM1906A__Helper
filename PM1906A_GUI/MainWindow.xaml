@@ -136,6 +136,7 @@
                             <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE4}" Content="R4"/>
                             <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE5}" Content="R5"/>
                             <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.RANGE6}" Content="R6"/>
+                            <ListBoxItem Tag="{x:Static PM1906AHelperCore:RangeEnum.AUTO}" Content="AUTO"/>
                         </ListBox>
                     </GroupBox>
 

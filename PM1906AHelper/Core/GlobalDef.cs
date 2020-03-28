@@ -15,7 +15,8 @@
         RANGE3,
         RANGE4,
         RANGE5,
-        RANGE6
+        RANGE6,
+        AUTO
     }
 
     public enum WavelengthEnum
