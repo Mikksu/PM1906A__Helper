@@ -455,7 +455,7 @@ namespace PM1906A_GUI.ViewModel
                 return new RelayCommand(() =>
                 {
                     pm.TestDarkCurrent();
-                    Thread.Sleep(2000);
+                    Thread.Sleep(5000);
                     ReloadCalParamsCommand.Execute(null);
                 });
             }
@@ -513,7 +513,11 @@ namespace PM1906A_GUI.ViewModel
                         {
                             // send Resistors
                             foreach (RangeEnum range in Enum.GetValues(typeof(RangeEnum)))
-                                pm.SetSamplingResistance(range, param.Res[(int)range]);
+                            {
+                                // ignore the AUTO range.
+                                if(range >=  RangeEnum.RANGE1 && range <= RangeEnum.RANGE6)
+                                    pm.SetSamplingResistance(range, param.Res[(int)range]);
+                            }
 
                             // send calibration equations.
                             foreach (var fpwave in param.WL)
@@ -531,6 +535,8 @@ namespace PM1906A_GUI.ViewModel
                             {
                                 pm.SetFIRCoefficient(i, param.FIR.Coefficient[i]);
                             }
+
+                            Thread.Sleep(3000);
                         }
                     }
                     catch(Exception ex)
@@ -552,6 +558,7 @@ namespace PM1906A_GUI.ViewModel
                         lock(pmLocker)
                         {
                             pm.SaveCalParam();
+                            Thread.Sleep(3000);
                         }
                     }
                     catch(Exception ex)
