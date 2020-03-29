@@ -455,7 +455,7 @@ namespace PM1906A_GUI.ViewModel
                 return new RelayCommand(() =>
                 {
                     pm.TestDarkCurrent();
-                    Thread.Sleep(2000);
+                    Thread.Sleep(5000);
                     ReloadCalParamsCommand.Execute(null);
                 });
             }
@@ -535,6 +535,8 @@ namespace PM1906A_GUI.ViewModel
                             {
                                 pm.SetFIRCoefficient(i, param.FIR.Coefficient[i]);
                             }
+
+                            Thread.Sleep(3000);
                         }
                     }
                     catch(Exception ex)
@@ -556,6 +558,7 @@ namespace PM1906A_GUI.ViewModel
                         lock(pmLocker)
                         {
                             pm.SaveCalParam();
+                            Thread.Sleep(3000);
                         }
                     }
                     catch(Exception ex)

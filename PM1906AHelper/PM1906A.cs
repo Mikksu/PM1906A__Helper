@@ -24,7 +24,7 @@ namespace PM1906AHelper
         {
             port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One)
             {
-                ReadTimeout = 2000
+                ReadTimeout = 5000
             };
 
             fir_filter = new FirFilter(1);
@@ -46,7 +46,7 @@ namespace PM1906AHelper
 
         private string _query(string command)
         {
-            // clear the recevie buffer.
+            // clear the receive buffer.
             port.ReadExisting();
 
             port.WriteLine(command);
@@ -134,7 +134,17 @@ namespace PM1906AHelper
 
         public void SetRange(RangeEnum Range)
         {
-            var cmd = $"{CMD_RANGE} {((int)Range + 1)}";
+            string para = "";
+            if (Range >= RangeEnum.RANGE1 && Range <= RangeEnum.RANGE6)
+            {
+                para = ((int)Range + 1).ToString();
+            }
+            else
+            {
+                para = Range.ToString();
+            }
+
+            var cmd = $"{CMD_RANGE} {para}";
             port.WriteLine(cmd);
 
             Thread.Sleep(10);
