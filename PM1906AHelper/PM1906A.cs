@@ -237,7 +237,14 @@ namespace PM1906AHelper
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    Close();
+                    try
+                    {
+                        Close();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
