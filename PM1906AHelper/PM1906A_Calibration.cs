@@ -1,5 +1,6 @@
 ﻿using PM1906AHelper.Core;
 using System;
+using System.Threading;
 
 namespace PM1906AHelper
 {

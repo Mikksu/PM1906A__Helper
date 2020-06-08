@@ -7,6 +7,7 @@ using PM1906AHelper.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
@@ -455,8 +456,32 @@ namespace PM1906A_GUI.ViewModel
                 return new RelayCommand(() =>
                 {
                     pm.TestDarkCurrent();
-                    Thread.Sleep(5000);
-                    ReloadCalParamsCommand.Execute(null);
+
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    while (true)
+                    {
+                        try
+                        {
+                            ReloadCalParamsCommand.Execute(null);
+                            break;
+                        }
+                        catch(Exception)
+                        {
+                            if (sw.Elapsed.TotalSeconds > 10)
+                            {
+                                pm.Close();
+                                MessageBox.Show(
+                                    "It's timeout to test the dark current, please reconnect the powermeter.", 
+                                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                                break;
+                            }
+                        }
+
+                        Thread.Sleep(500);
+                    }
                 });
             }
         }
